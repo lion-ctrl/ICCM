@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Carousel from 'components/Carousel';
 import Gallery from 'components/Gallery';
 import Layout from 'components/Layout';
+// helpers
+import { shimmer, toBase64 } from 'helpers';
 // styles
 import { breakPoints } from 'styles/variables';
 import { MapWithNoSSR } from 'components/Map';
@@ -26,15 +28,17 @@ const Home = () => {
             { text: 'Choose the right way 3' },
           ]}
           contentType="only-text"
+          height="100vh"
+          width="100vw"
         />
       </section>
 
       <section id="nosotros" className="container">
-        <h2 className="slide-in-title-active-animation">
+        <h2 className="slide-in-title-active">
           <div>NUESTRA IGLESIA</div>
         </h2>
         <div className="section-container">
-          <div className="slide-in-left-active-animation">
+          <div className="slide-in-left-active">
             <h1>
               Somos una iglesia que cree en Jesús, una iglesia que ama a Dios y
               a las personas.
@@ -44,18 +48,26 @@ const Home = () => {
               aprender sobre su propia fe.
             </p>
           </div>
-          <div className="section-image-container slide-in-right-active-animation">
-            <Image src="/assets/img/logo.jpg" alt="logo" layout="fill" />
+          <div className="section-image-container slide-in-right-active">
+            <Image
+              src="/assets/img/logo.jpg"
+              alt="logo"
+              layout="fill"
+              placeholder="blur"
+              blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                shimmer('100%', '100%')
+              )}`}
+            />
           </div>
         </div>
       </section>
 
       <section id="mision" className="container">
-        <h2 className="slide-in-title-active-animation">
+        <h2 className="slide-in-title-active">
           <div>Misión</div>
         </h2>
         <div className="section-container md-reverse">
-          <div className="slide-in-right-active-animation">
+          <div className="slide-in-right-active">
             <h3>
               Establecer y extender el Reino de Dios a través de Congregaciones
               e Institutos de Enseñanzas.
@@ -63,23 +75,27 @@ const Home = () => {
               <cite>Mateo 28:19</cite>
             </h3>
           </div>
-          <div className="section-image-container slide-in-left-active-animation">
+          <div className="section-image-container slide-in-left-active">
             <Image
               src="/assets/img/mission.png"
               alt="mision"
               layout="fill"
               objectFit="cover"
+              placeholder="blur"
+              blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                shimmer('100%', '100%')
+              )}`}
             />
           </div>
         </div>
       </section>
 
       <section id="vision" className="container">
-        <h2 className="slide-in-title-active-animation">
+        <h2 className="slide-in-title-active">
           <div>Visión</div>
         </h2>
         <div className="section-container">
-          <div className="slide-in-left-active-animation">
+          <div className="slide-in-left-active">
             <h3>
               Formar Hombres y mujeres maduros, capaces de enseñar e implantar
               la palabra de Dios y que estos Produzcan Cambios.
@@ -87,12 +103,16 @@ const Home = () => {
               <cite>Efesios 4:11-13</cite>
             </h3>
           </div>
-          <div className="section-image-container slide-in-right-active-animation">
+          <div className="section-image-container slide-in-right-active">
             <Image
               src="/assets/img/vision.jpg"
               alt="vision"
               layout="fill"
               objectFit="cover"
+              placeholder="blur"
+              blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                shimmer('100%', '100%')
+              )}`}
             />
           </div>
         </div>
@@ -122,18 +142,20 @@ const Home = () => {
             },
           ]}
           contentType="cite"
+          height="25rem"
+          width="100vw"
         />
       </section>
 
       <section id="galeria" className="container">
-        <h2 className="slide-in-title-active-animation">
+        <h2 className="slide-in-title-active">
           <div>Galeria</div>
         </h2>
         <Gallery />
       </section>
 
       <section id="ubicacion" className="container">
-        <h2 className="slide-in-title-active-animation">
+        <h2 className="slide-in-title-active">
           <div>Ubicación</div>
         </h2>
         <MapWithNoSSR />
@@ -159,21 +181,10 @@ const Home = () => {
 
         section {
           padding-top: 2rem;
-          padding-bottom: 2rem;
         }
 
-        section.carousel-container {
-          height: 100vh;
+        section#inicio.carousel-container {
           padding: 0;
-          position: relative;
-          width: 100%;
-        }
-
-        section#pastor.carousel-container {
-          height: 25rem;
-          padding: 0;
-          position: relative;
-          width: 100%;
         }
 
         div.section-container {
@@ -197,12 +208,8 @@ const Home = () => {
         }
 
         @media (min-width: ${breakPoints.md}) {
-          section.carousel-container {
-            height: calc(100vh - 4rem);
-          }
-
           section {
-            scroll-margin-top: 4rem;
+            padding-top: 4.5rem;
           }
 
           div.section-container {

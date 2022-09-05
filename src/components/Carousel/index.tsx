@@ -3,6 +3,8 @@ import React, { Fragment, useCallback, useState } from 'react';
 import Image from 'next/image';
 // components
 import ProgressBar from './ProgressBar';
+// helpers
+import { shimmer, toBase64 } from 'helpers';
 // styles
 import { addOpacity } from 'styles/utils';
 import { breakPoints, colors } from 'styles/variables';
@@ -11,6 +13,8 @@ export default function Carousel({
   backgroundImages,
   content,
   contentType,
+  height,
+  width,
 }: {
   backgroundImages: string[];
   content: {
@@ -20,6 +24,8 @@ export default function Carousel({
     imageAlt?: string;
   }[];
   contentType: 'only-text' | 'cite';
+  height: string;
+  width: string;
 }) {
   const [state, setState] = useState<{
     active: number;
@@ -104,6 +110,7 @@ export default function Carousel({
           resetInterval={state.resetInterval}
           AutomaticNextSlide={AutomaticNextSlide}
         />
+
         <div className="carousel-slider">
           {backgroundImages.map((bg, i) => (
             <div
@@ -118,19 +125,22 @@ export default function Carousel({
                   alt={`image-${i}`}
                   layout="fill"
                   objectFit="cover"
+                  placeholder="blur"
+                  blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                    shimmer('100%', '100%')
+                  )}`}
                 />
               </figure>
             </div>
           ))}
         </div>
+
         <article>
           {contentType === 'only-text' && (
             <aside className="container">
               <h2
                 className={
-                  state.isAnimateContent
-                    ? 'fade-in-down-automatic-animation'
-                    : 'fade-out-down-automatic-animation'
+                  state.isAnimateContent ? 'fade-in-down' : 'fade-out-down'
                 }
               >
                 {content.map(({ text }, i) => {
@@ -143,9 +153,7 @@ export default function Carousel({
           {contentType === 'cite' && (
             <aside
               className={`container ${
-                state.isAnimateContent
-                  ? 'fade-in-automatic-animation'
-                  : 'fade-out-automatic-animation'
+                state.isAnimateContent ? 'fade-in' : 'fade-out'
               }`}
             >
               {content.map(
@@ -153,7 +161,15 @@ export default function Carousel({
                   state.activeContent === i && (
                     <Fragment key={`${author}-${i}`}>
                       <figure className="text-with-image-container">
-                        <Image src={imagePath!} alt={imageAlt!} layout="fill" />
+                        <Image
+                          src={imagePath!}
+                          alt={imageAlt!}
+                          layout="fill"
+                          placeholder="blur"
+                          blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                            shimmer('100%', '100%')
+                          )}`}
+                        />
                       </figure>
                       <h2 className="text-with-image-title">
                         <blockquote>{text}</blockquote>
@@ -165,35 +181,42 @@ export default function Carousel({
             </aside>
           )}
         </article>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          onClick={handleLeft}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15 19l-7-7 7-7"
-          />
-        </svg>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          onClick={handleRight}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
+
+        <button type="button" title="next slide" onClick={handleLeft}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+        <button type="button" title="previous slide" onClick={handleRight}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
       </div>
       <style jsx>{`
         div.carousel {
           position: relative;
           overflow-x: hidden;
-          height: inherit;
-          width: inherit;
+          height: ${height};
+          width: ${width};
         }
 
         div.carousel-slider {
@@ -245,26 +268,10 @@ export default function Carousel({
           width: 60%;
         }
 
-        aside.fade-in-automatic-animation {
-          animation: fade-in-automatic-animation 1s ease-in-out forwards;
-        }
-
-        aside.fade-out-automatic-animation {
-          animation: fade-out-automatic-animation 1s ease-in-out forwards;
-        }
-
         h2 {
           color: ${colors.color1};
           line-height: 1.5;
           text-align: center;
-        }
-
-        h2.fade-in-down-automatic-animation {
-          animation: fade-in-down-automatic-animation 1s ease-in-out forwards;
-        }
-
-        h2.fade-out-down-automatic-animation {
-          animation: fade-out-down-automatic-animation 1s ease-in-out forwards;
         }
 
         figure.text-with-image-container {
@@ -285,34 +292,41 @@ export default function Carousel({
           font-weight: bold;
         }
 
-        svg {
+        button {
           background-color: ${addOpacity({
             color: colors.black,
             opacity: 0.8,
           })};
+          border: none;
           border-radius: 50%;
           cursor: pointer;
           height: 2rem;
+          outline: none;
           padding: 5px;
           position: absolute;
-          stroke: ${colors.color1};
-          top: calc(50% - 32px);
+          top: calc(50% - 18px);
           transition: background-color 0.2s ease;
           width: 2rem;
         }
 
-        svg:first-of-type {
+        button > svg {
+          stroke: ${colors.white};
+        }
+
+        button:first-of-type {
           left: 1rem;
         }
-        svg:last-of-type {
+        button:last-of-type {
           right: 1rem;
         }
 
-        svg:hover {
-          background-color: ${addOpacity({
-            color: colors.black,
-            opacity: 1,
-          })};
+        @media (hover: hover) {
+          button:hover {
+            background-color: ${addOpacity({
+              color: colors.black,
+              opacity: 1,
+            })};
+          }
         }
 
         @media (min-width: ${breakPoints.sm}) {

@@ -1,4 +1,7 @@
 import Image from 'next/image';
+// helpers
+import { shimmer, toBase64 } from 'helpers';
+// styles
 import { breakPoints } from 'styles/variables';
 
 export default function Gallery() {
@@ -17,13 +20,17 @@ export default function Gallery() {
         {galleryImages.map((img, i) => (
           <div
             key={`${img.alt}-${i}`}
-            className="gallery-img-container fade-in-active-animation"
+            className="gallery-img-container fade-in-active"
           >
             <Image
               src={img.src}
               alt={img.alt}
               layout="fill"
               objectFit="cover"
+              placeholder="blur"
+              blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                shimmer('100%', '100%')
+              )}`}
             />
           </div>
         ))}

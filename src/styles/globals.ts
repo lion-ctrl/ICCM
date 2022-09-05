@@ -23,6 +23,7 @@ export default css.global`
     margin: 0;
     padding: 0 0 4rem 0;
     overflow-x: hidden;
+    width: 100vw;
   }
 
   a {
@@ -82,61 +83,57 @@ export default css.global`
 
   @media (min-width: ${breakPoints.md}) {
     body {
-      padding-bottom: 0;
-    }
-  }
-
-  /* ****** Utilities ****** */
-  .container {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 1200px;
-    width: 90%;
-  }
-
-  .reverse {
-    flex-direction: row-reverse;
-  }
-
-  @media (min-width: ${breakPoints.md}) {
-    .md-reverse {
-      flex-direction: row-reverse !important;
+      padding: 4rem 0 0 0;
     }
   }
 
   /* ! ****** Animations ****** */
+  .fade-in {
+    animation: fade-in 1s ease-in-out forwards;
+  }
 
-  /* TODO: Mejorar las active animations con las automatics usando los keyframes */
+  .fade-out {
+    animation: fade-out 1s ease-in-out forwards;
+  }
+
+  .fade-in-down {
+    animation: fade-in-down 1s ease-in-out forwards;
+  }
+
+  .fade-out-down {
+    animation: fade-out-down 1s ease-in-out forwards;
+  }
 
   /* ? **** active-animation **** */
-  /* *** slide-in-left-active-animation *** */
-  .slide-in-left-active-animation {
+
+  /* *** slide-in-left-active *** */
+  .slide-in-left-active {
     transform: translateX(-130%);
     transition: transform 1s ease-in-out;
   }
 
-  *.is-active .slide-in-left-active-animation {
+  *.is-active .slide-in-left-active {
     transform: translateX(0%);
   }
 
-  /* *** slide-in-right-active-animation *** */
-  .slide-in-right-active-animation {
+  /* *** slide-in-right-active *** */
+  .slide-in-right-active {
     transform: translateX(130%);
     transition: transform 1s ease-in-out;
   }
 
-  *.is-active .slide-in-right-active-animation {
+  *.is-active .slide-in-right-active {
     transform: translateX(0%);
   }
 
-  /* *** slide-in-title-active-animation *** */
-  .slide-in-title-active-animation {
+  /* *** slide-in-title-active *** */
+  .slide-in-title-active {
     overflow: hidden;
     position: relative;
   }
 
-  .slide-in-title-active-animation::before,
-  .slide-in-title-active-animation::after {
+  .slide-in-title-active::before,
+  .slide-in-title-active::after {
     background-color: ${colors.color2};
     content: '';
     height: 1px;
@@ -146,45 +143,47 @@ export default css.global`
     width: 100%;
   }
 
-  .slide-in-title-active-animation::before {
+  .slide-in-title-active::before {
     top: 0;
     transform: translateX(-100%);
   }
 
-  .slide-in-title-active-animation::after {
+  .slide-in-title-active::after {
     bottom: 0;
     transform: translateX(100%);
   }
 
-  .slide-in-title-active-animation > div {
+  .slide-in-title-active > div {
     opacity: 0;
     pointer-events: none;
     transition: opacity 1s ease-in-out;
   }
 
-  *.is-active .slide-in-title-active-animation::before,
-  *.is-active .slide-in-title-active-animation::after {
+  *.is-active .slide-in-title-active::before,
+  *.is-active .slide-in-title-active::after {
     transform: translateX(0%);
   }
 
-  *.is-active .slide-in-title-active-animation > div {
+  *.is-active .slide-in-title-active > div {
     opacity: 1;
     pointer-events: auto;
   }
 
-  /* *** fade-in-active-animation *** */
-  .fade-in-active-animation {
+  /* *** fade-in-active *** */
+  .fade-in-active {
     opacity: 0;
     pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
   }
 
-  *.is-active .fade-in-active-animation {
-    animation: fade-in-automatic-animation 1s ease-in-out forwards;
+  *.is-active .fade-in-active {
+    opacity: 1;
   }
 
-  /* ? **** automatic-animation **** */
-  /* *** fade-in-automatic-animation *** */
-  @keyframes fade-in-automatic-animation {
+  /* **** keyframes **** */
+
+  /* *** fade-in *** */
+  @keyframes fade-in {
     from {
       opacity: 0;
     }
@@ -193,8 +192,8 @@ export default css.global`
     }
   }
 
-  /* *** fade-out-automatic-animation *** */
-  @keyframes fade-out-automatic-animation {
+  /* *** fade-out *** */
+  @keyframes fade-out {
     from {
       opacity: 1;
     }
@@ -203,8 +202,8 @@ export default css.global`
     }
   }
 
-  /* *** fade-in-down-automatic-animation *** */
-  @keyframes fade-in-down-automatic-animation {
+  /* *** fade-in-down *** */
+  @keyframes fade-in-down {
     from {
       opacity: 0;
       transform: translateY(-50%);
@@ -215,8 +214,8 @@ export default css.global`
     }
   }
 
-  /* *** fade-out-down-automatic-animation *** */
-  @keyframes fade-out-down-automatic-animation {
+  /* *** fade-out-down *** */
+  @keyframes fade-out-down {
     from {
       opacity: 1;
       transform: translateY(0%);
@@ -224,6 +223,25 @@ export default css.global`
     to {
       opacity: 0;
       transform: translateY(50%);
+    }
+  }
+
+  /* ****** Utilities ****** */
+  .container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1200px;
+    overflow-x: hidden;
+    width: 90%;
+  }
+
+  .reverse {
+    flex-direction: row-reverse;
+  }
+
+  @media (min-width: ${breakPoints.md}) {
+    .md-reverse {
+      flex-direction: row-reverse !important;
     }
   }
 

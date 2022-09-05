@@ -26,7 +26,7 @@ const ProgressBar = ({
     if (progress.progressIntervalKey === null) {
       progressIntervalKey = createInterval({
         cb: automaticProgressWidth,
-        time: 100,
+        time: 600,
       });
 
       setProgress((state) => ({
@@ -34,11 +34,12 @@ const ProgressBar = ({
         progressIntervalKey,
       }));
     }
+
     if (!resetInterval) return;
     clearInterval(progress.progressIntervalKey);
     progressIntervalKey = createInterval({
       cb: automaticProgressWidth,
-      time: 100,
+      time: 600,
     });
     setProgress((state) => ({
       ...state,
@@ -66,19 +67,21 @@ const ProgressBar = ({
 
   return (
     <>
-      <div className="carousel-progress-bar"></div>
+      <div
+        className="carousel-progress-bar"
+        style={{ width: `${progress.progressBarPercent}%` }}
+      ></div>
       <style jsx>{`
         div.carousel-progress-bar {
           background-color: ${addOpacity({
             color: colors.black,
             opacity: 0.6,
           })};
-          height: 0.3125rem;
+          height: 5px;
           left: 0;
           position: absolute;
           top: 0;
-          transition: width 100ms linear;
-          width: ${progress.progressBarPercent}%;
+          transition: width 600ms linear;
           z-index: 10;
         }
       `}</style>

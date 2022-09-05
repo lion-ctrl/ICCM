@@ -23,15 +23,18 @@ export default function Header() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // console.log("entries", entries);
         entries.forEach((entry) => {
           const id = entry.target.getAttribute('id');
           if (entry.isIntersecting) {
             entry.target.classList.add('is-active');
-            const $link = document.querySelector(`nav a[href="/#${id}"]`)!;
+            const $link = document.querySelector(
+              `nav a[href="/${id !== 'inicio' ? `#${id}` : ''}"]`
+            )!;
             $link.classList.add('is-active');
           } else {
-            const $link = document.querySelector(`nav a[href="/#${id}"]`)!;
+            const $link = document.querySelector(
+              `nav a[href="/${id !== 'inicio' ? `#${id}` : ''}"]`
+            )!;
             $link.classList.remove('is-active');
           }
         });
@@ -41,6 +44,7 @@ export default function Header() {
       }
     );
 
+    observer.observe(document.querySelector('#inicio')!);
     $menuLinks.forEach(($link) => {
       const hash = $link.getAttribute('href')!;
       if (hash.includes('/#')) {
@@ -54,7 +58,7 @@ export default function Header() {
 
   const menuData = [
     {
-      href: '/#inicio',
+      href: '/',
       Icon: Home,
       text: 'Inicio',
     },
@@ -103,6 +107,8 @@ export default function Header() {
             <a className="header-logo">ICCM</a>
           </Link>
           <button
+            type="button"
+            title="hamburger"
             className={`header-btn ${isMenuOpen ? 'is-active' : ''}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -116,8 +122,8 @@ export default function Header() {
             className={isMenuOpen ? 'is-active' : ''}
             onClick={() => setIsMenuOpen(false)}
           >
-            {menuData.map((data, i) => (
-              <Link href={data.href} key={`${data.text}-${i}`}>
+            {menuData.map((data) => (
+              <Link key={`${data.text}`} href={data.href}>
                 <a>
                   <data.Icon
                     style={{
@@ -141,7 +147,7 @@ export default function Header() {
           height: 4rem;
           padding: 10px 0;
           position: fixed;
-          width: 100%;
+          width: 100vw;
           z-index: 2000;
         }
 
@@ -251,7 +257,6 @@ export default function Header() {
 
         @media (min-width: ${breakPoints.md}) {
           header {
-            position: sticky;
             top: 0;
           }
 
@@ -266,6 +271,7 @@ export default function Header() {
           nav {
             flex-direction: row;
             opacity: 1;
+            padding: 0;
             pointer-events: auto;
             position: static;
             width: auto;
